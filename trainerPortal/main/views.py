@@ -29,7 +29,7 @@ class FormRequest(mixins.ListModelMixin,viewsets.GenericViewSet):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class UserAccountCreation(mixins.ListModelMixin,viewsets.GenericViewSet):
-    queryset = ActivityForm.objects.all()
+    queryset = ActivityForm.objects.filter(Confirmed=False)
     serializer_class = AccountSerializer
     permission_classes = [AllowAny,]
 

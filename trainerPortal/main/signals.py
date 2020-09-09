@@ -9,5 +9,7 @@ def create_UserAccount(sender, instance, created, **kwargs):
         if user_form:
             newAccount, created = UserAccount.objects.get_or_create(user=instance, form=user_form)
             newAccount.save()
+            user_form.Confirmed = True
+            user_form.save()
         else:
             print("Manually added user")
