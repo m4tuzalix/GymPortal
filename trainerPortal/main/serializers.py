@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from rest_framework import serializers
 from .models import ActivityForm
 from django.contrib.auth.models import User
@@ -12,15 +11,6 @@ class ActivityFormSerializer(serializers.ModelSerializer):
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["email", "password"]
+        fields = ["email"]
     
-=======
-from rest_framework.serializers import ModelSerializer
-from .models import ActivityForm
-
-class ActivityFormSerializer(ModelSerializer):
-    class Meta:
-        model = ActivityForm
-        fields = ["Age", "Activity", "Email", "Additional"]
->>>>>>> c751d28095b7d6a8de76d07b84df53ee2948b8d5
 

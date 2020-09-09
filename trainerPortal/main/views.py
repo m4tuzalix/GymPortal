@@ -8,6 +8,8 @@ from rest_framework.authentication import TokenAuthentication
 from django.http import JsonResponse
 from .serializers import ActivityFormSerializer, AccountSerializer
 from .models import ActivityForm, User
+from string import ascii_letters
+from random import choice
 
 
 class FormRequest(mixins.ListModelMixin,viewsets.GenericViewSet):
@@ -29,7 +31,7 @@ class FormRequest(mixins.ListModelMixin,viewsets.GenericViewSet):
 class UserAccountCreation(mixins.ListModelMixin,viewsets.GenericViewSet):
     queryset = ActivityForm.objects.all()
     serializer_class = AccountSerializer
-    permission_classes = [IsAdminUser, IsAuthenticated]
+    permission_classes = [AllowAny,]
 
     def list(self, request, format=None):
         serializer = ActivityFormSerializer(self.queryset, many=True)
@@ -38,7 +40,10 @@ class UserAccountCreation(mixins.ListModelMixin,viewsets.GenericViewSet):
     def create(self, request):
         serializer = AccountSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(username=f"user{(User.objects.count()+1)}")
+            password = ""
+            for x in range(10):
+                password += choice(ascii_letters)
+            serializer.save(username=f"user{(User.objects.count()+1)}", password=password)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

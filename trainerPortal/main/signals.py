@@ -6,5 +6,8 @@ from .models import User, UserAccount, ActivityForm
 def create_UserAccount(sender, instance, created, **kwargs):
     if created:
         user_form = ActivityForm.objects.filter(Email=instance.email).first()
-        newAccount, created = UserAccount.objects.get_or_create(user=instance, form=user_form)
-        newAccount.save()
+        if user_form:
+            newAccount, created = UserAccount.objects.get_or_create(user=instance, form=user_form)
+            newAccount.save()
+        else:
+            print("Manually added user")
