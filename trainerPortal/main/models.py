@@ -18,7 +18,7 @@ class ActivityForm(models.Model):
     Activity = models.CharField(choices=Sport_Activity, max_length=1)
     Email = models.EmailField(unique=True, db_index=True)
     Additional = models.TextField(max_length=500)
-    Confirmed = models.BooleanField(default=False, blank=True)
+    Confirmed = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.Email}'

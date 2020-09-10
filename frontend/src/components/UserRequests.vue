@@ -14,7 +14,7 @@
                 Activity: {{CheckResponseValue(user.Activity)}}
             </b-card-text>
 
-            <b-button type="submit" variant="primary" v-on:click="CreateUser(user.Email)">Create</b-button>
+            <b-button type="submit" variant="primary" v-on:click="CreateUser(user, $event)">Create</b-button>
         </b-card>
     </div>
 </template>
@@ -30,18 +30,22 @@ export default {
   },
   methods:{
     async getAllrequests(){
+        this.apiResponse = ""
         await axios.get('http://localhost:8000/allforms/').then(response =>{
             this.apiResponse = response.data
+            console.log(this.apiResponse)
         })
     },
-    async CreateUser(userEmail){
-        console.log(userEmail)
+    async CreateUser(user, evt){
+        console.log(user)
         const params = {
-            Email:userEmail
+            email:user.Email
         }
         await axios.post('http://localhost:8000/allforms/', params).then(response =>{
-            console.log(response)
+            evt.target.innerText = "Created"
+            evt.target.disabled = true
         })
+        
     },
     CheckResponseValue(val){
         const ValuesDictionary = {
@@ -64,7 +68,7 @@ export default {
         return ValuesDictionary.Activities[val]
     }
   },
-  created(){
+  mounted(){
       this.getAllrequests()
   }
 };

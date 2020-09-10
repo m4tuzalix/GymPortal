@@ -32,19 +32,23 @@ class UserAccountCreation(mixins.ListModelMixin,viewsets.GenericViewSet):
     queryset = ActivityForm.objects.filter(Confirmed=False)
     serializer_class = AccountSerializer
     permission_classes = [AllowAny,]
+    data = {}
 
     def list(self, request, format=None):
-        serializer = ActivityFormSerializer(self.queryset, many=True)
+        queryset = self.get_queryset()
+        serializer = ActivityFormSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def create(self, request):
         serializer = AccountSerializer(data=request.data)
         if serializer.is_valid():
-            password = ""
-            for x in range(10):
-                password += choice(ascii_letters)
-            serializer.save(username=f"user{(User.objects.count()+1)}", password=password)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            password = "1234"
+            user = f"User{User.objects.count()+1}"
+            self.data["user"] = f"User{User.objects.count()+1}"
+            self.data["email"] = serializer.validated_data["email"]
+            self.data["response"] = "User created"
+            serializer.save(username=user, password=password)
+            return Response(self.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             
